@@ -1,0 +1,6 @@
+# Core dependencies for Dogma 4 experiments
+numpy>=1.21.0
+matplotlib>=3.5.0
+
+# For the expansion of the experiments
+tqdm>=4.60.0
