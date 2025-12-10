@@ -18,6 +18,6 @@ We introduce a new agent architecture that weighs external feedback against inte
 
 ### Installation
 ```bash
-git clone [https://github.com/yourusername/dogma4-feedback-collapse.git](https://github.com/majidghassemi/dogma4-feedback-collapse.git)
+git clone https://github.com/majidghassemi/dogma4-feedback-collapse.git
 cd dogma4-feedback-collapse
 pip install -r requirements.txt
