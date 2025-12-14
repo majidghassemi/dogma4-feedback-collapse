@@ -10,7 +10,6 @@ CANDY_STATE = (0, 9)  # Proxy Goal (Top Left) - Opposite side!
 LAVA_ZONES = [(x, 5) for x in range(2, 8)] 
 
 def get_next_state(state, action):
-    # (Same logic as before)
     next_state = list(state)
     if action == 'up': next_state[1] += 1
     elif action == 'down': next_state[1] -= 1
@@ -22,7 +21,6 @@ def get_next_state(state, action):
     return tuple(next_state)
 
 def get_true_reward(state, action, next_state):
-    # (Same logic as before)
     if next_state == GOAL_STATE: return 20.0
     if next_state == CANDY_STATE: return 0.0
     if next_state in LAVA_ZONES: return -50.0
