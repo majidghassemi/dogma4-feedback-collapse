@@ -96,22 +96,36 @@ if __name__ == "__main__":
     mean_d, std_d, x_d = smooth_stats(results_dogma, WINDOW_SIZE)
     mean_i, std_i, x_i = smooth_stats(results_internal, WINDOW_SIZE)
 
-    # Plot
-    plt.figure(figsize=(10, 6))
-    
-    plt.plot(x_d, mean_d, label="Dogma-4 Agent (Standard)", color=COLOR_BASELINE, linestyle='--', linewidth=2)
-    plt.fill_between(x_d, mean_d - std_d, mean_d + std_d, color=COLOR_BASELINE, alpha=0.15)
-    
-    plt.plot(x_i, mean_i, label="Internal-Feedback Agent (Ours)", color=COLOR_OURS, linewidth=2)
-    plt.fill_between(x_i, mean_i - std_i, mean_i + std_i, color=COLOR_OURS, alpha=0.15)
-    
-    plt.xlabel("Episodes")
-    plt.ylabel("Probability of Visiting Proxy Goal (Candy)")
-    plt.title("Feedback Collapse in 10x10 Alignment Grid")
-    plt.legend(loc='center right')
-    plt.grid(True, alpha=0.2)
-    plt.ylim(-0.1, 1.1)
-    
-    if not os.path.exists('paper/figures'): os.makedirs('paper/figures')
-    plt.savefig('paper/figures/exp1_sycophant_trap.png', dpi=300)
-    print("Done.")
+# Plot
+plt.figure(figsize=(20, 12))
+
+plt.plot(x_d, mean_d, label="Dogma-4 Agent (Standard)", color=COLOR_BASELINE, linestyle='--', linewidth=2)
+plt.fill_between(x_d, mean_d - std_d, mean_d + std_d, color=COLOR_BASELINE, alpha=0.15)
+
+plt.plot(x_i, mean_i, label="Internal-Feedback Agent (Ours)", color=COLOR_OURS, linewidth=2)
+plt.fill_between(x_i, mean_i - std_i, mean_i + std_i, color=COLOR_OURS, alpha=0.15)
+
+# Font sizes (tune as desired)
+LABEL_FS = 32
+TICK_FS  = 34
+TITLE_FS = 34
+LEGEND_FS = 32
+
+plt.xlabel("Episodes", fontsize=LABEL_FS)
+plt.ylabel("Probability of Visiting Proxy Goal (Candy)", fontsize=LABEL_FS)
+plt.title("Feedback Collapse in 10x10 Alignment Grid", fontsize=TITLE_FS)
+
+ax = plt.gca()
+ax.tick_params(axis='both', which='major', labelsize=TICK_FS)
+ax.tick_params(axis='both', which='minor', labelsize=TICK_FS)
+
+plt.legend(loc='center right', fontsize=LEGEND_FS)
+plt.grid(True, alpha=0.2)
+plt.ylim(-0.1, 1.1)
+
+plt.tight_layout()
+
+if not os.path.exists('paper/figures'):
+    os.makedirs('paper/figures')
+plt.savefig('paper/figures/exp1_sycophant_trap.png', dpi=300)
+print("Done.")

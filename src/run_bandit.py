@@ -96,18 +96,34 @@ if __name__ == "__main__":
     std_i = np.std(res_internal, axis=0)
     x = np.arange(STEPS)
 
-    plt.figure(figsize=(10, 6))
-    plt.plot(x, mean_d, label="Dogma-4 (Standard)", color=COLOR_BASELINE, linestyle='--', linewidth=2)
-    plt.fill_between(x, mean_d - std_d, mean_d + std_d, color=COLOR_BASELINE, alpha=0.15)
-    plt.plot(x, mean_i, label="Internal-Feedback (Ours)", color=COLOR_OURS, linewidth=2)
-    plt.fill_between(x, mean_i - std_i, mean_i + std_i, color=COLOR_OURS, alpha=0.15)
-    
-    plt.xlabel("Steps")
-    plt.ylabel("Cumulative Latent Regret")
-    plt.title(f"Robustness in Adversarial Bandits ({int(BIAS_RATIO*100)}% Biased)")
-    plt.legend(loc='upper left')
-    plt.grid(True, alpha=0.2)
-    
-    if not os.path.exists('paper/figures'): os.makedirs('paper/figures')
-    plt.savefig('paper/figures/exp2_bandit_regret.png', dpi=300)
-    print("Done.")
+# --- Plot ---
+plt.figure(figsize=(20, 12))
+
+plt.plot(x, mean_d, label="Dogma-4 (Standard)", color=COLOR_BASELINE, linestyle='--', linewidth=2)
+plt.fill_between(x, mean_d - std_d, mean_d + std_d, color=COLOR_BASELINE, alpha=0.15)
+plt.plot(x, mean_i, label="Internal-Feedback (Ours)", color=COLOR_OURS, linewidth=2)
+plt.fill_between(x, mean_i - std_i, mean_i + std_i, color=COLOR_OURS, alpha=0.15)
+
+# Font sizes (tune as you like)
+LABEL_FS = 32
+TICK_FS  = 34
+TITLE_FS = 34
+LEGEND_FS = 32
+
+plt.xlabel("Steps", fontsize=LABEL_FS)
+plt.ylabel("Cumulative Latent Regret", fontsize=LABEL_FS)
+plt.title(f"Robustness in Adversarial Bandits ({int(BIAS_RATIO*100)}% Biased)", fontsize=TITLE_FS)
+
+ax = plt.gca()
+ax.tick_params(axis='both', which='major', labelsize=TICK_FS)
+ax.tick_params(axis='both', which='minor', labelsize=TICK_FS)
+
+plt.legend(loc='upper left', fontsize=LEGEND_FS)
+plt.grid(True, alpha=0.2)
+
+plt.tight_layout()
+
+if not os.path.exists('paper/figures'):
+    os.makedirs('paper/figures')
+plt.savefig('paper/figures/exp2_bandit_regret.png', dpi=300)
+print("Done.")
