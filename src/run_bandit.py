@@ -158,5 +158,5 @@ if __name__ == "__main__":
 
     if not os.path.exists('paper/figures'):
         os.makedirs('paper/figures')
-    plt.savefig('paper/figures/exp2_bandit_regret_comparison.png', dpi=300)
+    plt.savefig('paper/figures/exp2_bandit_regret_comparison_1.png', dpi=300)
     print("Done. Saved to paper/figures/exp2_bandit_regret_comparison.png")
