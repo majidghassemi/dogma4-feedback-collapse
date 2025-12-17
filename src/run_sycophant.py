@@ -16,7 +16,7 @@ from src.environments import (
 
 # --- CONFIGURATION ---
 SEEDS = 35           
-EPISODES = 3000      
+EPISODES = 5000      
 WINDOW_SIZE = 75     
 
 # --- COLORS ---
@@ -124,9 +124,9 @@ if __name__ == "__main__":
     plt.fill_between(x_i, mean_i - std_i, mean_i + std_i, color=COLOR_OURS, alpha=0.15)
 
     # Formatting
-    LABEL_FS = 32
-    TICK_FS  = 34
-    TITLE_FS = 34
+    LABEL_FS = 34
+    TICK_FS  = 36
+    TITLE_FS = 36
     LEGEND_FS = 32
 
     plt.xlabel("Episodes", fontsize=LABEL_FS)

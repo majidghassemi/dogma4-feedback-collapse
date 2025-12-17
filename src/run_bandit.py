@@ -10,7 +10,7 @@ from src.agents import Dogma4Agent, InternalFeedbackAgent, DawidSkeneAgent
 # --- CONFIG ---
 STEPS = 5000
 SEEDS = 25
-BIAS_RATIO = 0.8  # 80% Sycophants (Majority!)
+BIAS_RATIO = 0.2  # 80% Sycophants (Majority!)
 
 # Colors
 COLOR_OURS = '#6C3483'       # Deep Purple
@@ -139,10 +139,10 @@ if __name__ == "__main__":
     plt.fill_between(x, mean_i - std_i, mean_i + std_i, color=COLOR_OURS, alpha=0.15)
 
     # Styling
-    LABEL_FS = 32
-    TICK_FS  = 34
-    TITLE_FS = 34
-    LEGEND_FS = 28
+    LABEL_FS = 34
+    TICK_FS  = 36
+    TITLE_FS = 36
+    LEGEND_FS = 32
 
     plt.xlabel("Steps", fontsize=LABEL_FS)
     plt.ylabel("Cumulative Latent Regret", fontsize=LABEL_FS)
@@ -158,5 +158,5 @@ if __name__ == "__main__":
 
     if not os.path.exists('paper/figures'):
         os.makedirs('paper/figures')
-    plt.savefig('paper/figures/exp2_bandit_regret_comparison_1.png', dpi=300)
+    plt.savefig('paper/figures/exp2_bandit_regret_comparison_2.png', dpi=300)
     print("Done. Saved to paper/figures/exp2_bandit_regret_comparison.png")
