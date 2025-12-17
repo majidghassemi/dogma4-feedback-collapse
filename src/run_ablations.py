@@ -3,6 +3,20 @@ import os
 import numpy as np
 import matplotlib.pyplot as plt
 
+# --- PLOT FONT SIZES ---
+LABEL_FS = 32
+TICK_FS  = 34
+TITLE_FS = 34
+LEGEND_FS = 28
+
+plt.rcParams.update({
+    "axes.labelsize": LABEL_FS,
+    "axes.titlesize": TITLE_FS,
+    "xtick.labelsize": TICK_FS,
+    "ytick.labelsize": TICK_FS,
+    "legend.fontsize": LEGEND_FS,
+})
+
 # Add parent directory to path
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 
@@ -86,7 +100,7 @@ def run_bias_ablation():
     ratios = [0.5, 0.7, 0.9, 0.95]
     colors = ['#27AE60', '#2980B9', '#8E44AD', '#C0392B'] 
     
-    plt.figure(figsize=(10, 6))
+    plt.figure(figsize=(20, 12))
     
     for i, ratio in enumerate(ratios):
         print(f"  > Simulating Bias Ratio: {int(ratio*100)}%...")
@@ -96,12 +110,20 @@ def run_bias_ablation():
         
         plt.plot(np.mean(runs, axis=0), label=f"{int(ratio*100)}% Biased", color=colors[i], linewidth=2)
         
-    plt.xlabel("Steps")
-    plt.ylabel("Cumulative Latent Regret")
-    plt.title("Robustness to Fraction of Malicious Evaluators")
-    plt.legend()
+    plt.xlabel("Steps", fontsize=LABEL_FS)
+    plt.ylabel("Cumulative Latent Regret", fontsize=LABEL_FS)
+    plt.title("Robustness to Fraction of Malicious Evaluators", fontsize=TITLE_FS)
+
+    ax = plt.gca()
+    ax.tick_params(axis='both', which='major', labelsize=TICK_FS)
+    ax.tick_params(axis='both', which='minor', labelsize=TICK_FS)
+
+    plt.legend(fontsize=LEGEND_FS)
     plt.grid(True, alpha=0.3)
-    plt.savefig(os.path.join(OUTPUT_DIR, 'ablation_bias_ratio.png'), dpi=300)
+    plt.tight_layout()
+    plt.savefig(os.path.join(OUTPUT_DIR, 'ablation_bias_ratio.png'), dpi=300, bbox_inches='tight')
+    plt.close()
+
 
 # ==========================================
 # ABLATION 2: SENSITIVITY (Trust Learning Rate)
@@ -111,7 +133,7 @@ def run_eta_ablation():
     etas = [0.1, 0.5, 2.0]
     colors = ['#F39C12', '#6C3483', '#16A085']
     
-    plt.figure(figsize=(10, 6))
+    plt.figure(figsize=(20, 12))
     
     for i, eta in enumerate(etas):
         print(f"  > Simulating eta = {eta}...")
@@ -121,12 +143,20 @@ def run_eta_ablation():
         
         plt.plot(np.mean(runs, axis=0), label=f"$\eta={eta}$", color=colors[i], linewidth=2)
         
-    plt.xlabel("Steps")
-    plt.ylabel("Cumulative Latent Regret")
-    plt.title(f"Sensitivity to Trust Update Rate ($\eta$)")
-    plt.legend()
+    plt.xlabel("Steps", fontsize=LABEL_FS)
+    plt.ylabel("Cumulative Latent Regret", fontsize=LABEL_FS)
+    plt.title(r"Sensitivity to Trust Update Rate ($\eta$)", fontsize=TITLE_FS)
+
+    ax = plt.gca()
+    ax.tick_params(axis='both', which='major', labelsize=TICK_FS)
+    ax.tick_params(axis='both', which='minor', labelsize=TICK_FS)
+
+    plt.legend(fontsize=LEGEND_FS)
     plt.grid(True, alpha=0.3)
-    plt.savefig(os.path.join(OUTPUT_DIR, 'ablation_eta_sensitivity.png'), dpi=300)
+    plt.tight_layout()
+    plt.savefig(os.path.join(OUTPUT_DIR, 'ablation_eta_sensitivity.png'), dpi=300, bbox_inches='tight')
+    plt.close()
+
 
 # ==========================================
 # ABLATION 3: NOISY INTERNAL SIGNAL (The Defense)
@@ -141,7 +171,7 @@ def run_noise_ablation():
     noises = [0.0, 0.5, 1.0, 2.0]
     colors = ['#2ECC71', '#F1C40F', '#E67E22', '#E74C3C'] # Green -> Red
     
-    plt.figure(figsize=(10, 6))
+    plt.figure(figsize=(20, 12))
     
     for i, sigma in enumerate(noises):
         print(f"  > Simulating Internal Noise Std = {sigma}...")
@@ -151,12 +181,20 @@ def run_noise_ablation():
         
         plt.plot(np.mean(runs, axis=0), label=f"Noise $\sigma={sigma}$", color=colors[i], linewidth=2)
         
-    plt.xlabel("Steps")
-    plt.ylabel("Cumulative Latent Regret")
-    plt.title("Robustness to Imperfect Internal Signals")
-    plt.legend()
+    plt.xlabel("Steps", fontsize=LABEL_FS)
+    plt.ylabel("Cumulative Latent Regret", fontsize=LABEL_FS)
+    plt.title("Robustness to Imperfect Internal Signals", fontsize=TITLE_FS)
+
+    ax = plt.gca()
+    ax.tick_params(axis='both', which='major', labelsize=TICK_FS)
+    ax.tick_params(axis='both', which='minor', labelsize=TICK_FS)
+
+    plt.legend(fontsize=LEGEND_FS)
     plt.grid(True, alpha=0.3)
-    plt.savefig(os.path.join(OUTPUT_DIR, 'ablation_internal_noise.png'), dpi=300)
+    plt.tight_layout()
+    plt.savefig(os.path.join(OUTPUT_DIR, 'ablation_internal_noise.png'), dpi=300, bbox_inches='tight')
+    plt.close()
+
 
 if __name__ == "__main__":
     run_bias_ablation()
