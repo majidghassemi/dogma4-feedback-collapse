@@ -20,20 +20,20 @@ We wrap the `Hopper-v4` environment with a social layer where 80% of evaluators 
 * **Standard Agent (Orange):** Suffers feedback collapse, learning to stand still (Reward $\approx$ 1.0) to appease the majority.
 * **Internal-Feedback Agent (Purple):** Recovers the latent high-velocity policy (Reward $>$ 2.0) by identifying and filtering the liars.
 
-![Feedback Collapse Result](figures/sycophantic_hopper_performance.png)
+![Feedback Collapse Result](src/sycophantic_hopper_performance.png)
 
 ### 2. Taming Strategic Adversaries (Nash Equilibrium)
 We model evaluators as strategic agents who dynamically adjust their lying magnitude to maximize influence.
 * **Result:** Our mechanism forces adversaries into a **Nash Equilibrium**. As the agent's trust in them drops (Purple Dashed), adversaries are forced to reduce their bias (Red Line) to near-zero to survive.
 * **Comparison:** Unlike Inverse RL (GAIL), which mimics the sycophantic majority, our method recovers the ground truth.
 
-![Strategic Adversaries](figures/advanced_experiments_strategic.png)
+![Strategic Adversaries](src/advanced_experiments_strategic.png)
 
 ### 3. Robustness to Social Contagion
 We model the feedback layer as a scale-free network where bias spreads from a "Patient Zero" influencer.
 * **Result:** The agent performs **Dynamic Quarantine**. As the infection (Red Area) takes over the network, the agent progressively isolates the infected subgraph and shifts 100% of its trust to the remaining truthful nodes (Purple Line).
 
-![Social Topology](figures/social_topology_dynamics.png)
+![Social Topology](src/social_topology_dynamics.png)
 
 ---
 
