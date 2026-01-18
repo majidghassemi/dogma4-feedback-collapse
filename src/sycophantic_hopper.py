@@ -156,7 +156,7 @@ if __name__ == "__main__":
         plt.yticks(fontsize=TICK_FS)
         plt.legend(fontsize=LEGEND_FS)
         
-        # UPDATED: The "Ghost Grid"
+        # UPDATED: The "Ghost Grid"""
         plt.grid(True, alpha=0.1, linestyle='--')
     
     plt.tight_layout()
