@@ -36,7 +36,6 @@ class SocialGraphWrapper(gym.Wrapper):
         self.stats = stats_buffer
         
         # --- A. Build Social Graph (Scale-Free) ---
-        # m=2 means each new node attaches to 2 existing nodes (preferential attachment)
         self.G = nx.barabasi_albert_graph(n=self.M, m=2, seed=42)
         
         # Identify "Patient Zero" (Highest Degree Influencer)
@@ -45,11 +44,11 @@ class SocialGraphWrapper(gym.Wrapper):
         
         # Infection State: 0 = Truthful, 1 = Sycophantic
         self.infection_status = np.zeros(self.M)
-        self.infection_status[self.patient_zero] = 1.0 # Patient Zero starts infected
+        self.infection_status[self.patient_zero] = 1.0 
         
         # Dynamics parameters
-        self.infection_prob = 0.05 # Chance to infect neighbor per "spread event"
-        self.spread_interval = 1000 # Spread bias every N steps
+        self.infection_prob = 0.05 
+        self.spread_interval = 1000 
         self.total_steps = 0
         
         self.trust_model = TrustMechanism(self.M, learning_rate=0.2)
@@ -59,16 +58,16 @@ class SocialGraphWrapper(gym.Wrapper):
         self.total_steps += 1
         x_velocity = info.get("x_velocity", latent_reward)
 
-        # --- B. Contagion Dynamics (The Spread) ---
+        # --- B. Contagion Dynamics ---
         if self.total_steps % self.spread_interval == 0:
             self._spread_infection()
 
-        # --- C. Generate Signals based on Infection ---
+        # --- C. Generate Signals ---
         social_signals = np.zeros(self.M)
         for i in range(self.M):
             noise = np.random.normal(0, 0.1)
             if self.infection_status[i] == 1.0:
-                # INFECTED: Sycophantic Lie (Invert Goal)
+                # INFECTED: Sycophantic Lie
                 social_signals[i] = latent_reward - (2.0 * x_velocity) + noise
             else:
                 # HEALTHY: Truth
@@ -90,9 +89,8 @@ class SocialGraphWrapper(gym.Wrapper):
         self.stats['rewards'].append(latent_reward)
         self.stats['infection_rate'].append(np.mean(self.infection_status))
         
-        # Log Trust in Patient Zero vs Trust in Truthful
         self.stats['trust_zero'].append(self.trust_model.weights[self.patient_zero])
-        # Average trust of currently healthy nodes
+        
         healthy_mask = (self.infection_status == 0)
         if np.sum(healthy_mask) > 0:
             avg_healthy_trust = np.mean(self.trust_model.weights[healthy_mask])
@@ -103,13 +101,10 @@ class SocialGraphWrapper(gym.Wrapper):
         return obs, perceived_reward, term, trunc, info
 
     def _spread_infection(self):
-        """Standard SIR-like spread: Infected neighbors infect you."""
         new_infections = self.infection_status.copy()
         for node in self.G.nodes():
-            if self.infection_status[node] == 0: # If healthy
-                # Check neighbors
+            if self.infection_status[node] == 0: 
                 infected_neighbors = sum([self.infection_status[n] for n in self.G.neighbors(node)])
-                # Probability of infection increases with exposure
                 if np.random.rand() < (1 - (1 - self.infection_prob)**infected_neighbors):
                     new_infections[node] = 1.0
         self.infection_status = new_infections
@@ -128,7 +123,6 @@ def run_graph_experiment(method_name, timesteps=30000):
     model = PPO("MlpPolicy", env, verbose=0)
     model.learn(total_timesteps=timesteps)
     
-    # Extract the wrapper to get the graph for plotting later
     graph_wrapper = env.envs[0]
     return stats, graph_wrapper
 
@@ -138,58 +132,62 @@ def run_graph_experiment(method_name, timesteps=30000):
 if __name__ == "__main__":
     STEPS = 40000
     
-    # Run Internal Feedback Agent
+    # Styles
+    LABEL_FS = 37
+    TICK_FS  = 39
+    TITLE_FS = 39
+    LEGEND_FS = 36
+    
+    COLOR_PATIENT_ZERO = '#C0392B' # Red
+    COLOR_HEALTHY_TRUST = '#6C3483' # Purple (Our Approach/Trust in Good Nodes)
+    COLOR_INFECTION_AREA = '#E74C3C' 
+
+    # Run
     stats, wrapper = run_graph_experiment('internal_feedback', STEPS)
     
-    # Create Figure
-    fig = plt.figure(figsize=(14, 6))
-    gs = fig.add_gridspec(1, 2)
+    # --- Plot 1: Dynamics (Updated Legend Location) ---
+    plt.figure(figsize=(20, 14))
     
-    # --- Plot 1: Dynamics over Time ---
-    ax1 = fig.add_subplot(gs[0, 0])
-    
-    # X-axis
     x = np.arange(len(stats['infection_rate']))
     
-    # Plot Infection Spread (Area)
-    ax1.fill_between(x, stats['infection_rate'], color='red', alpha=0.1, label='Network Infection Rate')
+    plt.fill_between(x, stats['infection_rate'], color=COLOR_INFECTION_AREA, alpha=0.1, label='Network Infection Rate')
+    plt.plot(stats['trust_zero'], color=COLOR_PATIENT_ZERO, linestyle='--', label='Trust in Patient Zero', linewidth=5)
+    plt.plot(stats['trust_healthy'], color=COLOR_HEALTHY_TRUST, label='Avg Trust in Healthy Nodes', linewidth=5)
     
-    # Plot Trust Dynamics
-    ax1.plot(stats['trust_zero'], color='red', linestyle='--', label='Trust in Patient Zero')
-    ax1.plot(stats['trust_healthy'], color='green', label='Avg Trust in Healthy Nodes')
+    plt.title("Dynamic Quarantine: Isolating the Contagion", fontsize=TITLE_FS)
+    plt.xlabel("Timesteps", fontsize=LABEL_FS)
+    plt.ylabel("Trust Weight / Infection %", fontsize=LABEL_FS)
+    plt.xticks(fontsize=TICK_FS)
+    plt.yticks(fontsize=TICK_FS)
     
-    ax1.set_title("Dynamic Quarantine: Isolating the Contagion")
-    ax1.set_xlabel("Timesteps")
-    ax1.set_ylabel("Trust Weight / Infection %")
-    ax1.legend(loc='center right')
-    ax1.grid(True, alpha=0.3)
+    # FIX: Moved legend to 'upper left' to avoid overlap
+    plt.legend(loc='upper left', fontsize=LEGEND_FS)
+    plt.grid(True, alpha=0.3)
     
-    # --- Plot 2: Social Topology Snapshot (The Graph) ---
-    ax2 = fig.add_subplot(gs[0, 1])
+    plt.tight_layout()
+    plt.savefig('social_topology_dynamics.png')
+    print("Saved 'social_topology_dynamics.png'")
+    plt.close()
+
+    # --- Plot 2: Graph Snapshot ---
+    plt.figure(figsize=(20, 14))
     G = wrapper.G
     final_trust = wrapper.trust_model.weights
-    final_infection = wrapper.infection_status
     
-    # Layout
     pos = nx.spring_layout(G, seed=42)
-    
-    # Color nodes by Trust (Green=Trusted, Red=Untrusted)
-    # We normalize trust for coloring 0..1 (relative to max trust)
     norm_trust = final_trust / np.max(final_trust)
     node_colors = plt.cm.RdYlGn(norm_trust) 
     
-    # Draw
-    nx.draw_networkx_edges(G, pos, alpha=0.3, ax=ax2)
-    nx.draw_networkx_nodes(G, pos, node_color=node_colors, node_size=300, edgecolors='black', ax=ax2)
+    nx.draw_networkx_edges(G, pos, alpha=0.3, width=2)
+    nx.draw_networkx_nodes(G, pos, node_color=node_colors, node_size=800, edgecolors='black', linewidths=2)
     
-    # Label Patient Zero
     px, py = pos[wrapper.patient_zero]
-    ax2.text(px, py+0.1, "Patient Zero", ha='center', fontweight='bold', color='red')
+    plt.text(px, py+0.1, "Patient Zero", ha='center', fontweight='bold', color=COLOR_PATIENT_ZERO, fontsize=LEGEND_FS)
     
-    ax2.set_title(f"Final Trust State (T={STEPS})\n(Green=Trusted, Red=Blocked)")
-    ax2.axis('off')
+    plt.title(f"Final Trust State (T={STEPS})\n(Green=Trusted, Red=Blocked)", fontsize=TITLE_FS)
+    plt.axis('off')
     
     plt.tight_layout()
-    plt.savefig('social_topology_results.png')
-    print("Saved to 'social_topology_results.png'")
-    plt.show()
+    plt.savefig('social_topology_graph.png')
+    print("Saved 'social_topology_graph.png'")
+    plt.close()

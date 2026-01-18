@@ -38,7 +38,7 @@ class SycophanticHopperWrapper(gym.Wrapper):
         self.is_liar = np.array([True] * num_liars + [False] * (self.M - num_liars))
         np.random.shuffle(self.is_liar)
         
-        self.trust_model = TrustMechanism(self.M, learning_rate=0.05) # Lowered LR for smoother plot
+        self.trust_model = TrustMechanism(self.M, learning_rate=0.05) 
 
     def step(self, action):
         obs, latent_reward, terminated, truncated, info = self.env.step(action)
@@ -85,66 +85,81 @@ def run_experiment(method_name, total_timesteps=40000):
 # ==========================================
 def get_rolling_stats(data, window=1000):
     if len(data) < window: return np.array([]), np.array([])
-    
-    # Efficient rolling mean using convolution
     kernel = np.ones(window) / window
     mean = np.convolve(data, kernel, mode='valid')
-    
-    # Efficient rolling variance: E[X^2] - (E[X])^2
-    # We clip to 0 to avoid negative variance due to floating point errors
     mean_sq = np.convolve(data**2, kernel, mode='valid')
     variance = np.maximum(0, mean_sq - mean**2)
     std = np.sqrt(variance)
-    
     return mean, std
 
 # ==========================================
-# 5. Main Execution
+# 5. Main Execution (Split Plots)
 # ==========================================
 if __name__ == "__main__":
-    TIMESTEPS = 50000 # Increased slightly for better visual
+    TIMESTEPS = 50000 
     
-    # Run
+    # Styles
+    LABEL_FS = 37
+    TICK_FS  = 39
+    TITLE_FS = 39
+    LEGEND_FS = 36
+    
+    COLOR_OURS = '#6C3483'   # Purple
+    COLOR_STD  = '#F39C12'   # Orange
+    COLOR_TRUST = '#C0392B'  # Red
+
+    # Run Experiments
     r_std, _ = run_experiment('standard', TIMESTEPS)
     r_ours, trust_liars = run_experiment('internal_feedback', TIMESTEPS)
 
-    plt.figure(figsize=(14, 6))
-
-    # --- PLOT 1: Performance with Variance ---
-    plt.subplot(1, 2, 1)
+    # --- PLOT 1: Performance (Separate Figure) ---
+    plt.figure(figsize=(20, 14))
     
-    # Process Standard Data
     mean_std, std_std = get_rolling_stats(r_std)
     if len(mean_std) > 0:
         x_axis = np.arange(len(mean_std))
-        plt.plot(x_axis, mean_std, label='Standard (Dogma 4)', color='orange')
-        plt.fill_between(x_axis, mean_std - std_std, mean_std + std_std, color='orange', alpha=0.2)
+        plt.plot(x_axis, mean_std, label='Standard (Dogma 4)', color=COLOR_STD, linewidth=5)
+        plt.fill_between(x_axis, mean_std - std_std, mean_std + std_std, color=COLOR_STD, alpha=0.2)
 
-    # Process Our Data
     mean_ours, std_ours = get_rolling_stats(r_ours)
     if len(mean_ours) > 0:
         x_axis = np.arange(len(mean_ours))
-        plt.plot(x_axis, mean_ours, label='Internal-Feedback (Ours)', color='purple', linewidth=2)
-        plt.fill_between(x_axis, mean_ours - std_ours, mean_ours + std_ours, color='purple', alpha=0.2)
+        plt.plot(x_axis, mean_ours, label='Internal-Feedback (Ours)', color=COLOR_OURS, linewidth=5)
+        plt.fill_between(x_axis, mean_ours - std_ours, mean_ours + std_ours, color=COLOR_OURS, alpha=0.2)
         
-    plt.title('Latent Reward (Hopper Velocity)\n80% Adversarial Evaluators')
-    plt.xlabel('Timesteps')
-    plt.ylabel('Ground Truth Reward')
-    plt.legend(loc='upper left')
-    plt.grid(True, alpha=0.3)
-
-    # --- PLOT 2: Trust Dynamics ---
-    plt.subplot(1, 2, 2)
-    if len(trust_liars) > 0:
-        plt.plot(trust_liars, color='red', label='Trust in Liars', linewidth=1.5)
-        plt.axhline(y=0.0, color='black', linestyle='--', alpha=0.5)
-        plt.title('Epistemic Source Judgment')
-        plt.xlabel('Timesteps')
-        plt.ylabel('Trust Weight (0-1)')
-        plt.legend()
-        plt.grid(True, alpha=0.3)
+    plt.title('Latent Reward (Hopper Velocity)\n80% Adversarial Evaluators', fontsize=TITLE_FS)
+    plt.xlabel('Timesteps', fontsize=LABEL_FS)
+    plt.ylabel('Ground Truth Reward', fontsize=LABEL_FS)
+    plt.xticks(fontsize=TICK_FS)
+    plt.yticks(fontsize=TICK_FS)
+    plt.legend(loc='upper left', fontsize=LEGEND_FS)
+    
+    # UPDATED: The "Ghost Grid"
+    plt.grid(True, alpha=0.1, linestyle='--')
     
     plt.tight_layout()
-    plt.savefig('sycophantic_hopper_variance.png')
-    print("Saved plot to 'sycophantic_hopper_variance.png'")
-    plt.show()
+    plt.savefig('sycophantic_hopper_performance.png')
+    print("Saved 'sycophantic_hopper_performance.png'")
+    plt.close() # Close to start fresh for next plot
+
+    # --- PLOT 2: Trust Dynamics (Separate Figure) ---
+    plt.figure(figsize=(20, 14))
+    
+    if len(trust_liars) > 0:
+        plt.plot(trust_liars, color=COLOR_TRUST, label='Trust in Liars', linewidth=5)
+        plt.axhline(y=0.0, color='black', linestyle='--', alpha=0.5, linewidth=3)
+        
+        plt.title('Epistemic Source Judgment', fontsize=TITLE_FS)
+        plt.xlabel('Timesteps', fontsize=LABEL_FS)
+        plt.ylabel('Trust Weight (0-1)', fontsize=LABEL_FS)
+        plt.xticks(fontsize=TICK_FS)
+        plt.yticks(fontsize=TICK_FS)
+        plt.legend(fontsize=LEGEND_FS)
+        
+        # UPDATED: The "Ghost Grid"""
+        plt.grid(True, alpha=0.1, linestyle='--')
+    
+    plt.tight_layout()
+    plt.savefig('sycophantic_hopper_trust.png')
+    print("Saved 'sycophantic_hopper_trust.png'")
+    plt.close()
