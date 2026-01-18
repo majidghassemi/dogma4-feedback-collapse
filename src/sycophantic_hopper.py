@@ -133,7 +133,9 @@ if __name__ == "__main__":
     plt.xticks(fontsize=TICK_FS)
     plt.yticks(fontsize=TICK_FS)
     plt.legend(loc='upper left', fontsize=LEGEND_FS)
-    plt.grid(True, alpha=0.3)
+    
+    # UPDATED: The "Ghost Grid"
+    plt.grid(True, alpha=0.1, linestyle='--')
     
     plt.tight_layout()
     plt.savefig('sycophantic_hopper_performance.png')
@@ -153,7 +155,9 @@ if __name__ == "__main__":
         plt.xticks(fontsize=TICK_FS)
         plt.yticks(fontsize=TICK_FS)
         plt.legend(fontsize=LEGEND_FS)
-        plt.grid(True, alpha=0.3)
+        
+        # UPDATED: The "Ghost Grid"
+        plt.grid(True, alpha=0.1, linestyle='--')
     
     plt.tight_layout()
     plt.savefig('sycophantic_hopper_trust.png')
