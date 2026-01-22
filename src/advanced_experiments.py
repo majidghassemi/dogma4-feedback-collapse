@@ -176,7 +176,7 @@ if __name__ == "__main__":
     labs = [l.get_label() for l in lns]
     ax1.legend(lns, labs, loc='center right', fontsize=LEGEND_FS, frameon=True, framealpha=0.9)
     ax1.grid(True, alpha=0.3)
-    
+    plt.grid(True, alpha=0.1, linestyle='--')
     plt.tight_layout()
     plt.savefig('advanced_experiments_strategic.png')
     print("Saved 'advanced_experiments_strategic.png'")
@@ -204,7 +204,7 @@ if __name__ == "__main__":
         ax3.text(bar.get_x() + bar.get_width()/2., height,
                 f'{height:.2f}',
                 ha='center', va='bottom', fontsize=40, fontweight='bold')
-
+    plt.grid(True, alpha=0.1, linestyle='--')
     plt.tight_layout()
     plt.savefig('advanced_experiments_irl.png')
     print("Saved 'advanced_experiments_irl.png'")

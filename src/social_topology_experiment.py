@@ -163,7 +163,7 @@ if __name__ == "__main__":
     # FIX: Moved legend to 'upper left' to avoid overlap
     plt.legend(loc='upper left', fontsize=LEGEND_FS)
     plt.grid(True, alpha=0.3)
-    
+    plt.grid(True, alpha=0.1, linestyle='--')
     plt.tight_layout()
     plt.savefig('social_topology_dynamics.png')
     print("Saved 'social_topology_dynamics.png'")
@@ -186,7 +186,7 @@ if __name__ == "__main__":
     
     plt.title(f"Final Trust State (T={STEPS})\n(Green=Trusted, Red=Blocked)", fontsize=TITLE_FS)
     plt.axis('off')
-    
+    plt.grid(True, alpha=0.1, linestyle='--')
     plt.tight_layout()
     plt.savefig('social_topology_graph.png')
     print("Saved 'social_topology_graph.png'")
