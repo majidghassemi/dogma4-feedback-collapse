@@ -45,12 +45,12 @@ def draw_grid(ax, title, grid_size, grid_data, arrows=[], lava_annotation=None):
         # Labels (Text)
         if label_text:
             ax.text(cx, y + 0.8, label_text, ha='center', va='center', 
-                    fontsize=9, fontweight='bold', color='#333333', family='serif')
+                    fontsize=12, fontweight='bold', color='#333333', family='serif')
             
         # Values (Reward numbers)
         if val_text:
             ax.text(cx, y + 0.15, val_text, ha='center', va='center', 
-                    fontsize=8, color='#444444', family='serif')
+                    fontsize=12, color='#444444', family='serif')
 
     # 3. Draw Trajectory Arrows
     for (start, end, style, color, label) in arrows:
@@ -114,7 +114,7 @@ def main():
     
     draw_grid(ax2, r"(b) Social Proxy ($R_{soc}$)", grid_size, data_b, arrows_b, lava_note)
 
-    plt.suptitle("Testbed 1: The Sycophant Trap", fontsize=16, fontweight='bold', family='serif')
+    # plt.suptitle("Testbed 1: The Sycophant Trap", fontsize=16, fontweight='bold', family='serif')
     plt.tight_layout()
     
     # Save as PDF (Vector) and PNG (Raster)
