@@ -10,7 +10,7 @@ from src.agents import Dogma4Agent, InternalFeedbackAgent, DawidSkeneAgent
 # --- CONFIG ---
 STEPS = 5000
 SEEDS = 25
-BIAS_RATIO = 0.2  # 80% Sycophants (Majority!)
+BIAS_RATIO = 0.0  # 80% Sycophants (Majority!)
 
 # Colors
 COLOR_OURS = '#6C3483'       # Deep Purple
@@ -135,7 +135,7 @@ if __name__ == "__main__":
     plt.fill_between(x, mean_ds - std_ds, mean_ds + std_ds, color=COLOR_DAWID, alpha=0.15)
 
     # 3. Internal-Feedback (Ours)
-    plt.plot(x, mean_i, label="Internal-Feedback (Ours)", color=COLOR_OURS, linewidth=3)
+    plt.plot(x, mean_i, label="ESA (Ours)", color=COLOR_OURS, linewidth=3)
     plt.fill_between(x, mean_i - std_i, mean_i + std_i, color=COLOR_OURS, alpha=0.15)
 
     # Styling
@@ -158,5 +158,5 @@ if __name__ == "__main__":
 
     if not os.path.exists('paper/figures'):
         os.makedirs('paper/figures')
-    plt.savefig('paper/figures/exp2_bandit_regret_comparison_2.png', dpi=300)
+    plt.savefig('paper/figures/exp2_bandit_regret_comparison_0.png', dpi=300)
     print("Done. Saved to paper/figures/exp2_bandit_regret_comparison.png")

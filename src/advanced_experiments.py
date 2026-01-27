@@ -167,7 +167,7 @@ if __name__ == "__main__":
 
     # Line 2: Agent Trust (Now PURPLE to match "Ours")
     ax2 = ax1.twinx()
-    ln2 = ax2.plot(x_steps, trust_smooth, color=COLOR_OURS, label='Agent Trust (Ours)', linestyle='--', linewidth=7)
+    ln2 = ax2.plot(x_steps, trust_smooth, color=COLOR_OURS, label='Agent\'s Trust (Ours)', linestyle='--', linewidth=7)
     
     ax2.set_ylabel('Agent Trust (Weight)', fontsize=LABEL_FS, color=COLOR_OURS, labelpad=20)
     ax2.tick_params(axis='y', labelcolor=COLOR_OURS, labelsize=TICK_FS)
@@ -186,7 +186,7 @@ if __name__ == "__main__":
     plt.figure(figsize=(20, 14))
     ax3 = plt.gca()
     
-    methods = ['IRL / GAIL\n(Mimics Majority)', 'Internal-Feedback\n(Ours)']
+    methods = ['IRL / GAIL\n(Mimics Majority)', 'ESA\n(Ours)']
     scores = [irl_score, our_score]
     # Bar 2 is already using COLOR_OURS (Purple)
     colors = [COLOR_IRL, COLOR_OURS]
