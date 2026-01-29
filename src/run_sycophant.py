@@ -120,7 +120,7 @@ if __name__ == "__main__":
     plt.fill_between(x_m, mean_m - std_m, mean_m + std_m, color=COLOR_ROBUST, alpha=0.15)
 
     # 3. Ours
-    plt.plot(x_i, mean_i, label="Internal-Feedback (Ours)", color=COLOR_OURS, linewidth=3)
+    plt.plot(x_i, mean_i, label="ESA (Ours)", color=COLOR_OURS, linewidth=3)
     plt.fill_between(x_i, mean_i - std_i, mean_i + std_i, color=COLOR_OURS, alpha=0.15)
 
     # Formatting

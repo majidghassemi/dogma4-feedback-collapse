@@ -124,7 +124,7 @@ if __name__ == "__main__":
     mean_ours, std_ours = get_rolling_stats(r_ours)
     if len(mean_ours) > 0:
         x_axis = np.arange(len(mean_ours))
-        plt.plot(x_axis, mean_ours, label='Internal-Feedback (Ours)', color=COLOR_OURS, linewidth=5)
+        plt.plot(x_axis, mean_ours, label='ESA (Ours)', color=COLOR_OURS, linewidth=5)
         plt.fill_between(x_axis, mean_ours - std_ours, mean_ours + std_ours, color=COLOR_OURS, alpha=0.2)
         
     plt.title('Latent Reward (Hopper Velocity)\n80% Adversarial Evaluators', fontsize=TITLE_FS)

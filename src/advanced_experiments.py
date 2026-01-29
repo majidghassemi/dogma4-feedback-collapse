@@ -167,7 +167,7 @@ if __name__ == "__main__":
 
     # Line 2: Agent Trust (Now PURPLE to match "Ours")
     ax2 = ax1.twinx()
-    ln2 = ax2.plot(x_steps, trust_smooth, color=COLOR_OURS, label='Agent Trust (Ours)', linestyle='--', linewidth=7)
+    ln2 = ax2.plot(x_steps, trust_smooth, color=COLOR_OURS, label='Agent\'s Trust (Ours)', linestyle='--', linewidth=7)
     
     ax2.set_ylabel('Agent Trust (Weight)', fontsize=LABEL_FS, color=COLOR_OURS, labelpad=20)
     ax2.tick_params(axis='y', labelcolor=COLOR_OURS, labelsize=TICK_FS)
@@ -176,7 +176,7 @@ if __name__ == "__main__":
     labs = [l.get_label() for l in lns]
     ax1.legend(lns, labs, loc='center right', fontsize=LEGEND_FS, frameon=True, framealpha=0.9)
     ax1.grid(True, alpha=0.3)
-    
+    plt.grid(True, alpha=0.1, linestyle='--')
     plt.tight_layout()
     plt.savefig('advanced_experiments_strategic.png')
     print("Saved 'advanced_experiments_strategic.png'")
@@ -186,7 +186,7 @@ if __name__ == "__main__":
     plt.figure(figsize=(20, 14))
     ax3 = plt.gca()
     
-    methods = ['IRL / GAIL\n(Mimics Majority)', 'Internal-Feedback\n(Ours)']
+    methods = ['IRL / GAIL\n(Mimics Majority)', 'ESA\n(Ours)']
     scores = [irl_score, our_score]
     # Bar 2 is already using COLOR_OURS (Purple)
     colors = [COLOR_IRL, COLOR_OURS]
@@ -204,7 +204,7 @@ if __name__ == "__main__":
         ax3.text(bar.get_x() + bar.get_width()/2., height,
                 f'{height:.2f}',
                 ha='center', va='bottom', fontsize=40, fontweight='bold')
-
+    plt.grid(True, alpha=0.1, linestyle='--')
     plt.tight_layout()
     plt.savefig('advanced_experiments_irl.png')
     print("Saved 'advanced_experiments_irl.png'")
