@@ -61,8 +61,10 @@ The agent maintains a belief distribution $w_t$ over the trustworthiness of eval
 1.  **Epistemic Update:** Periodically sample an axiom check. If an evaluator $m$ deviates from the axiom ($|y_t^m - z_t|$ is high), their trust weight $w_m$ is penalized exponentially.
     $$w_m \leftarrow w_m \cdot \exp(-\eta \cdot \ell_m)$$
 2.  **Signal Aggregation:** Compute the trusted reward using the purified weights.
-    $$\hat{r}_t \leftarrow \sum_{m=1}^M w_m \cdot y_t^m$$
-3.  **RL Integration:** Update the policy (PPO or Q-Learning) using $\hat{r}_t$.
+    $$
+    \hat{r}_t \leftarrow \sum_{m=1}^M w_m \cdot y_t^m
+    $$
+4.  **RL Integration:** Update the policy (PPO or Q-Learning) using $\hat{r}_t$.
 ---
 
 ## 🧪 Experimental Results
