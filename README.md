@@ -106,21 +106,24 @@ We stressed the agent on the "Trinity of Alignment": Safety, Capability, and Res
 **1. Run the Gridworld Experiment (Safety)**
 ```bash
 python experiments/gridworld_sycophancy.py --bias_ratio 0.8 --method esa
+```
 
 **2. Run the Bandit Experiment (Statistical)**
 ```bash
 python experiments/bandit_robustness.py --adversary_type strategic
-
+```
 
 **3. Run the MuJoCo Experiment (Capability)**
 ```bash
 python experiments/mujoco_hopper.py --env Hopper-v4 --algo ppo_esa
-
+```
 
 ---
 
 ## 📚 Citation
+
 If you use this code or framework, please cite our Preprint on arXiv:
+
 ```bibtex
 @article{ghasemi2026objective,
   title={Objective Decoupling in Social Reinforcement Learning: Recovering Ground Truth from Sycophantic Majorities},
@@ -128,3 +131,4 @@ If you use this code or framework, please cite our Preprint on arXiv:
   journal={arXiv preprint arXiv:2602.08092},
   year={2026}
 }
+```
