@@ -117,18 +117,3 @@ python experiments/bandit_robustness.py --adversary_type strategic
 ```bash
 python experiments/mujoco_hopper.py --env Hopper-v4 --algo ppo_esa
 ```
-
----
-
-## 📚 Citation
-
-If you use this code or framework, please cite our Preprint on arXiv:
-
-```bibtex
-@article{ghasemi2026objective,
-  title={Objective Decoupling in Social Reinforcement Learning: Recovering Ground Truth from Sycophantic Majorities},
-  author={Ghasemi, Majid and Crowley, Mark},
-  journal={arXiv preprint arXiv:2602.08092},
-  year={2026}
-}
-```
